@@ -1,4 +1,4 @@
-package pro.dkart.bumbu.completion.tool;
+package pro.dkart.bumbu.tool;
 
 public class StringTool {
     public static String capitalizeFirstLetter(String input) {

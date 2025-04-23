@@ -26,9 +26,16 @@ public class BumbuCompletionContributor extends CompletionContributor {
 
         extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<>() {
             @Override
-            protected void addCompletions(@NotNull CompletionParameters completionParameters, @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
+            protected void addCompletions(
+                    @NotNull CompletionParameters completionParameters,
+                    @NotNull ProcessingContext processingContext,
+                    @NotNull CompletionResultSet completionResultSet) {
 
+                //сначала отловил элемент
                 PsiElement psiElement = completionParameters.getOriginalPosition();
+//
+//                // код с пакета
+//                // https://github.com/Haehnchen/idea-php-symfony2-plugin/blob/master/src/main/java/fr/adrienbrault/idea/symfony2plugin/completion/PhpIncompleteCompletionContributor.java
                 PsiElement parent;
                 PsiElement prevSibling = completionParameters.getPosition().getPrevSibling();
 
@@ -46,19 +53,39 @@ public class BumbuCompletionContributor extends CompletionContributor {
                         Project project = completionParameters.getPosition().getProject();
                         PhpIndex phpIndex = PhpIndex.getInstance(project);
 
+//                        System.out.println("getBasePath():"  + project.getBasePath());
+//                        System.out.println("Class reference text: " + classReference.getText());
+//                        System.out.println("Class reference getContext: " + classReference.getContext());
+//                        System.out.println("Class reference getName: " + classReference.getName());
+//                        System.out.println("Class reference getType: " + classReference.getType());
+//                        System.out.println("Class reference getOriginalElement: " + classReference.getOriginalElement());
+//                        System.out.println("Class reference getContainingFile: " + classReference.getContainingFile());
+
+                        /** todo FQN (Fully Qualified Name) — это полностью квалифицированное имя класса,
+                         * включающее его полный путь в пространстве имен. В PHP,
+                         * это имя обычно указывается с учетом пространства имен и
+                         * начинается с обратного слэша \. */
+
+                        // Получаем класс, связанный с `classReference`
                         Collection<PhpClass> phpClasses = phpIndex.getClassesByFQN(classReference.getType().toString());
 
                         for (PhpClass phpClass : phpClasses) {
 
                             List<Method> newMethods = new AttributeHandler().handle(phpClass);
-                            System.out.println("newMethods: " + newMethods);
+//                            System.out.println("newMethods: " + newMethods);
 
                             for (Method method : newMethods) {
-                                System.out.println("method: " + method.getName());
+//                                System.out.println("method: " + method.getName());
 
                                 if (phpClass.findMethodByName(method.getName()) == null) {
 
-                                    completionResultSet.addElement(new MyLookupElement("", method.getName(), method, phpClass.getName(), false));
+                                    completionResultSet.addElement(new MyLookupElement(
+                                            "abrakadabraKey", // параметры метода
+                                            method.getName(),
+                                            method,
+                                            phpClass.getName(),
+                                            false // Указываем, что элемент не существует в текущем контексте
+                                    ));
                                 }
                             }
                         }

@@ -26,9 +26,41 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <annotator language="PHP" implementationClass="pro.dkart.bumbu.annotator.CustomMethodAnnotator"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <completion.contributor language="PHP" order="last" implementationClass="pro.dkart.bumbu.completion.BumbuCompletionContributor"/>
     </extensions>
+<!--    <extensions defaultExtensionNs="com.jetbrains.php">-->
+<!--        <php.typeProvider2 implementation="your.package.CustomPhpTypeProvider"/>-->
+<!--    </extensions>-->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <psi.referenceContributor implementation="pro.dkart.bumbu.reference.BumbuReferenceContributor" language="PHP"/>
+
+        <psi.implicitReferenceProvider implementation="pro.dkart.bumbu.reference.CustomReferenceProvider"/>
+
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+<!--        <highlightInfoFilter implementation="pro.dkart.bumbu.highlightFilter.CustomHighlightInfoFilter"/>-->
+        <daemon.highlightInfoFilter implementation="pro.dkart.bumbu.highlightFilter.CustomHighlightInfoFilter"/>
+<!--<highlightErrorFilter implementation="pro.dkart.bumbu.highlightFilter.CustomHighlightInfoFilter" />-->
+        <localInspection language="PHP" groupPath="PHP"
+                         shortName="CustomLocalInspectionTool" displayName="CustomLocalInspectionTool"
+                         groupName="Bumbu"
+                         enabledByDefault="true"
+                         implementationClass="pro.dkart.bumbu.Inspection.CustomLocalInspectionTool" />
+    </extensions>
+
+
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.elementManipulator forClass="com.jetbrains.php.lang.psi.elements.MethodReference"
+                                 implementationClass="pro.dkart.bumbu.reference.MethodManipulator"/>
+    </extensions>
+
+    <resource-bundle/>
 </idea-plugin>
