@@ -24,31 +24,24 @@ public class CustomReferenceProvider implements ImplicitReferenceProvider {
             if (variable != null) {
                 PhpType classType = ((VariableImpl) variable).getType();
 
-                    PhpIndex phpIndex = PhpIndex.getInstance(variable.getProject());
+                PhpIndex phpIndex = PhpIndex.getInstance(variable.getProject());
 
-                    for (String className : classType.getTypes()) {
-                        Collection<PhpClass> classes = phpIndex.getClassesByFQN(className);
-                        if (!classes.isEmpty()) {
-                            PhpClass phpClass = classes.iterator().next();
-                            if (phpClass != null) {
-                                System.out.println("foun"+ phpClass.getType()+":"+methodReference.getName());
-                                if (new BumbuTool().isBumbuMethod(phpClass, methodReference.getName())) {
+                for (String className : classType.getTypes()) {
+                    Collection<PhpClass> classes = phpIndex.getClassesByFQN(className);
+                    if (!classes.isEmpty()) {
+                        PhpClass phpClass = classes.iterator().next();
+                        if (phpClass != null) {
+                            if (new BumbuTool().isBumbuMethod(phpClass, methodReference.getName())) {
 
-                                    PsiElement attribute = new BumbuTool().getBumbuAttibuteByMethod(phpClass, methodReference.getName());
-                                    PsiSymbolService psiSymbolService = PsiSymbolService.getInstance();
-                                    Symbol symbol = psiSymbolService.asSymbol(attribute);
+                                PsiElement attribute = new BumbuTool().getBumbuAttibuteByMethod(phpClass, methodReference.getName());
+                                PsiSymbolService psiSymbolService = PsiSymbolService.getInstance();
+                                Symbol symbol = psiSymbolService.asSymbol(attribute);
 
-                                    return Collections.singleton(symbol);
-                                }
+                                return Collections.singleton(symbol);
                             }
                         }
                     }
-
-
-
-
-
-
+                }
             }
         }
         return Collections.emptyList();

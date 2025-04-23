@@ -1,6 +1,5 @@
 package pro.dkart.bumbu.tool;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.psi.PsiFile;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpAttribute;
@@ -12,26 +11,20 @@ import pro.dkart.bumbu.tool.extractor.ClassAttributeExtractor;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BumbuTool {
     public PhpClass findPhpClass(String className, PsiFile file) {
-        // 1. Извлекаем имя класса из сообщения об ошибке
         if (className == null || className.isEmpty()) {
             return null;
         }
 
-        // 2. Получаем PhpIndex
         PhpIndex phpIndex = PhpIndex.getInstance(file.getProject());
 
-        // 3. Ищем класс (учитываем неймспейсы)
         Collection<PhpClass> classes = phpIndex.getClassesByFQN(className);
         if (!classes.isEmpty()) {
             return classes.iterator().next();
         }
 
-        // 4. Альтернативный поиск, если класс не найден
         return null;
     }
 

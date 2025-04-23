@@ -2,7 +2,6 @@ package pro.dkart.bumbu.completion.dto;
 
 import com.jetbrains.php.lang.psi.elements.PhpAttribute;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
